@@ -24,6 +24,7 @@
 #include <vector>
 #include <fstream>
 #include <set>
+#include <array>
 #include <sys/time.h>
 
 #ifdef __EMSCRIPTEN__

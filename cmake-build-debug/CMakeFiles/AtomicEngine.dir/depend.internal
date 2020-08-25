@@ -21,12 +21,20 @@ CMakeFiles/AtomicEngine.dir/main.cpp.o
  /usr/local/include/glm/detail/func_exponential_simd.inl
  /usr/local/include/glm/detail/func_geometric.inl
  /usr/local/include/glm/detail/func_geometric_simd.inl
+ /usr/local/include/glm/detail/func_integer.inl
+ /usr/local/include/glm/detail/func_integer_simd.inl
  /usr/local/include/glm/detail/func_matrix.inl
  /usr/local/include/glm/detail/func_matrix_simd.inl
+ /usr/local/include/glm/detail/func_packing.inl
+ /usr/local/include/glm/detail/func_packing_simd.inl
+ /usr/local/include/glm/detail/func_trigonometric.inl
+ /usr/local/include/glm/detail/func_trigonometric_simd.inl
  /usr/local/include/glm/detail/func_vector_relational.inl
  /usr/local/include/glm/detail/func_vector_relational_simd.inl
  /usr/local/include/glm/detail/qualifier.hpp
  /usr/local/include/glm/detail/setup.hpp
+ /usr/local/include/glm/detail/type_half.hpp
+ /usr/local/include/glm/detail/type_half.inl
  /usr/local/include/glm/detail/type_mat2x2.hpp
  /usr/local/include/glm/detail/type_mat2x2.inl
  /usr/local/include/glm/detail/type_mat2x3.hpp
@@ -124,7 +132,10 @@ CMakeFiles/AtomicEngine.dir/main.cpp.o
  /usr/local/include/glm/ext/vector_uint3_sized.hpp
  /usr/local/include/glm/ext/vector_uint4.hpp
  /usr/local/include/glm/ext/vector_uint4_sized.hpp
+ /usr/local/include/glm/fwd.hpp
  /usr/local/include/glm/geometric.hpp
+ /usr/local/include/glm/glm.hpp
+ /usr/local/include/glm/integer.hpp
  /usr/local/include/glm/mat2x2.hpp
  /usr/local/include/glm/mat2x3.hpp
  /usr/local/include/glm/mat2x4.hpp
@@ -135,12 +146,15 @@ CMakeFiles/AtomicEngine.dir/main.cpp.o
  /usr/local/include/glm/mat4x3.hpp
  /usr/local/include/glm/mat4x4.hpp
  /usr/local/include/glm/matrix.hpp
+ /usr/local/include/glm/packing.hpp
  /usr/local/include/glm/simd/common.h
  /usr/local/include/glm/simd/exponential.h
  /usr/local/include/glm/simd/geometric.h
+ /usr/local/include/glm/simd/integer.h
  /usr/local/include/glm/simd/matrix.h
  /usr/local/include/glm/simd/neon.h
  /usr/local/include/glm/simd/platform.h
+ /usr/local/include/glm/trigonometric.hpp
  /usr/local/include/glm/vec2.hpp
  /usr/local/include/glm/vec3.hpp
  /usr/local/include/glm/vec4.hpp
