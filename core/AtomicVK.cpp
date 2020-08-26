@@ -14,6 +14,7 @@ void AtomicVK::callback ()
 {
   if (status>=5)
   {
+    // Increment FPS counter
     if (engine->timer.test(frame_cap, TIMER_FPS+0))
     {
       draw();
@@ -226,6 +227,16 @@ void AtomicVK::cleanupSwapChain()
     vkDestroyImageView(device, imageView, nullptr);
 
   vkDestroySwapchainKHR(device, swapchain, nullptr);
+
+  // Destroy Buffers
+  for (size_t i = 0; i < swapchain_images.size(); i++)
+  {
+    // Uniform Buffers
+    vkDestroyBuffer(device, uniformBuffers[i], nullptr);
+    vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
+  }
+
+  vkDestroyDescriptorPool(device, descriptorPool, nullptr);
 }
 
 // Read file
@@ -344,4 +355,22 @@ void AtomicVK::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize s
   vkQueueWaitIdle(graphics_queue);
 
   vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
+}
+
+void AtomicVK::updateUniformBuffer(uint32_t currentImage)
+{
+  static auto startTime = std::chrono::high_resolution_clock::now();
+  auto currentTime = std::chrono::high_resolution_clock::now();
+  float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+  UniformBufferObject ubo{};
+  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+  ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+  ubo.proj = glm::perspective(glm::radians(45.0f), swapchain_extent.width / (float) swapchain_extent.height, 0.1f, 10.0f);
+  ubo.proj[1][1] *= -1;
+
+  void* data;
+  vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
+  memcpy(data, &ubo, sizeof(ubo));
+  vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
 }
