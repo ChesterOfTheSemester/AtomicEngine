@@ -5,6 +5,7 @@ CMakeFiles/AtomicEngine.dir/main.cpp.o: ../core/AtomicEngine.h
 CMakeFiles/AtomicEngine.dir/main.cpp.o: ../core/AtomicVK.cpp
 CMakeFiles/AtomicEngine.dir/main.cpp.o: ../core/AtomicVK.h
 CMakeFiles/AtomicEngine.dir/main.cpp.o: ../main.cpp
+CMakeFiles/AtomicEngine.dir/main.cpp.o: ../stb_image.h
 CMakeFiles/AtomicEngine.dir/main.cpp.o: /usr/local/include/GLFW/glfw3.h
 CMakeFiles/AtomicEngine.dir/main.cpp.o: /usr/local/include/GLFW/glfw3native.h
 CMakeFiles/AtomicEngine.dir/main.cpp.o: /usr/local/include/glm/common.hpp

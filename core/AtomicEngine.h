@@ -5,6 +5,8 @@
 #ifndef ATOMICENGINE_H
 #define ATOMICENGINE_H
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <iostream>
 #include <unistd.h>
 #include <stdio.h>
@@ -18,6 +20,7 @@
 #include <set>
 #include <array>
 #include <sys/time.h>
+#include "../stb_image.h"
 
 #define Min(a,b) a<b?a:b
 #define Max(a,b) a>b?a:b
