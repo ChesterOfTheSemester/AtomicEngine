@@ -6,16 +6,15 @@
  * General
  */
 
-char window_title[0xFFF];
-
-long int c_frame, fps, frame_cap=62;
+char window_title[0x7F];
+unsigned int c_frame, fps, frame_cap=2262;
 
 void AtomicVK::callback ()
 {
   if (status>=5)
   {
     // Increment FPS counter
-    if (engine->timer.test(frame_cap, TIMER_FPS+0))
+    //if (engine->timer.test(frame_cap, TIMER_FPS+0))
     {
       draw();
       c_frame++;
@@ -31,7 +30,7 @@ void AtomicVK::callback ()
     // Update Window Title
     if(engine->timer.test(60, TIMER_FPS+2))
     {
-      snprintf(window_title, sizeof(window_title), "FPS: %ld | Time MS: %llu", fps, engine->timer.getMS());
+      snprintf(window_title, sizeof(window_title), "FPS: %ld | FPS CAP: %ld | Time MS: %llu", fps, frame_cap, engine->timer.getMS());
       glfwSetWindowTitle(window, window_title);
     }
   }
@@ -180,7 +179,9 @@ VkPresentModeKHR AtomicVK::chooseSwapPresentationMode(const std::vector<VkPresen
   for (const auto& available_present_mode : available_presentation_modes)
     if (available_present_mode == VK_PRESENT_MODE_MAILBOX_KHR)
       return available_present_mode;
+
   return VK_PRESENT_MODE_IMMEDIATE_KHR;
+  //return VK_PRESENT_MODE_MAILBOX_KHR;
 }
 
 // Choose Swap Extent / Resolution
