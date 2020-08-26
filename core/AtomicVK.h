@@ -699,6 +699,9 @@ class AtomicVK
   {
     cleanupSwapChain();
 
+    vkDestroyBuffer(device, vertexBuffer, nullptr);
+    vkFreeMemory(device, vertexBufferMemory, nullptr);
+
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
       vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
       vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
@@ -718,6 +721,7 @@ class AtomicVK
     vkDestroyInstance(instance, nullptr);
 
     glfwDestroyWindow(window);
+
     glfwTerminate();
   }
 
@@ -732,6 +736,10 @@ class AtomicVK
   };
   VkQueueFamilyIndices VkFindQueueFamilies(VkPhysicalDevice device);
   bool checkDeviceExtensionSupport(VkPhysicalDevice device);
+
+  void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+  void createVertexBuffer();
+  void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
   /**
    *  Screen
