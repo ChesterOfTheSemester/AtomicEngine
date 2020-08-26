@@ -7,7 +7,7 @@
  */
 
 char window_title[0x7F];
-unsigned int c_frame, fps, frame_cap=2262;
+unsigned int c_frame, fps, frame_cap=150;
 
 void AtomicVK::callback ()
 {
