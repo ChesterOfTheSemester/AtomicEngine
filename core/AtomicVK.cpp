@@ -216,23 +216,27 @@ void AtomicVK::recreateSwapChain()
 // Destroy SwapChain
 void AtomicVK::cleanupSwapChain()
 {
-  for (auto framebuffer : swapChainFramebuffers)
+  vkDestroyImageView(device, depthImageView, nullptr);
+  vkDestroyImage(device, depthImage, nullptr);
+  vkFreeMemory(device, depthImageMemory, nullptr);
+
+  for (auto framebuffer : swapChainFramebuffers) {
     vkDestroyFramebuffer(device, framebuffer, nullptr);
+  }
 
   vkFreeCommandBuffers(device, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+
   vkDestroyPipeline(device, graphicsPipeline, nullptr);
   vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
   vkDestroyRenderPass(device, renderPass, nullptr);
 
-  for (auto imageView : swapChainImageViews)
+  for (auto imageView : swapChainImageViews) {
     vkDestroyImageView(device, imageView, nullptr);
+  }
 
   vkDestroySwapchainKHR(device, swapchain, nullptr);
 
-  // Destroy Buffers
-  for (size_t i = 0; i < swapchain_images.size(); i++)
-  {
-    // Uniform Buffers
+  for (size_t i = 0; i < swapchain_images.size(); i++) {
     vkDestroyBuffer(device, uniformBuffers[i], nullptr);
     vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
   }
@@ -313,17 +317,6 @@ void AtomicVK::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemor
   vkBindBufferMemory(device, buffer, bufferMemory, 0);
 }
 
-void AtomicVK::createVertexBuffer()
-{
-  VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
-  createBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vertexBuffer, vertexBufferMemory);
-
-  void* data;
-  vkMapMemory(device, vertexBufferMemory, 0, bufferSize, 0, &data);
-  memcpy(data, vertices.data(), (size_t) bufferSize);
-  vkUnmapMemory(device, vertexBufferMemory);
-}
-
 void AtomicVK::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
 {
   VkCommandBufferAllocateInfo allocInfo{};
@@ -365,7 +358,8 @@ void AtomicVK::updateUniformBuffer(uint32_t currentImage)
   float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
   UniformBufferObject ubo{};
-  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+  ubo.model2 = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
   ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
   ubo.proj = glm::perspective(glm::radians(45.0f), swapchain_extent.width / (float) swapchain_extent.height, 0.1f, 10.0f);
   ubo.proj[1][1] *= -1;
