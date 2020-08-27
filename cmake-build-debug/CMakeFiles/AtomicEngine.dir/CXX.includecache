@@ -83,6 +83,8 @@ array
 -
 sys/time.h
 -
+unordered_map
+-
 emscripten.h
 -
 core/AtomicEngine.h

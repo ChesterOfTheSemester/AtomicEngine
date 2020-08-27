@@ -648,6 +648,8 @@ class AtomicVK
       VkFormat depthFormat = findDepthFormat();
 
       createImage(swapchain_extent.width, swapchain_extent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
+
+      // Todo: Fix VL Error: "UNASSIGNED-CoreValidation-DrawState-InvalidImageAspect"
       depthImageView = createImageView(depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
     }
 
@@ -731,6 +733,7 @@ class AtomicVK
       samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
       samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 
+      // Todo: Fix VL Error: "VUID-VkSamplerCreateInfo-anisotropyEnable-01070"
       if (vkCreateSampler(device, &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS) {
         throw std::runtime_error("failed to create texture sampler!");
       }
@@ -1267,6 +1270,11 @@ class AtomicVK
   VkDeviceMemory vertexBufferMemory;
   VkBuffer indexBuffer;
   VkDeviceMemory indexBufferMemory;
+
+  const std::vector<uint16_t> indices = {
+          0, 1, 2, 2, 3, 0,
+          4, 5, 6, 6, 7, 4
+  };
   struct Vertex
   {
     glm::vec3 pos;
@@ -1302,10 +1310,6 @@ class AtomicVK
 
       return attributeDescriptions;
     }
-  };
-  const std::vector<uint16_t> indices = {
-    0, 1, 2, 2, 3, 0,
-    4, 5, 6, 6, 7, 4
   };
   const std::vector<Vertex> vertices = {
     {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
