@@ -110,7 +110,8 @@ class AtomicVK
  protected:
 
   void draw()
-  {vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+  {
+    vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
     VkResult result = vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
@@ -1370,7 +1371,6 @@ class AtomicVK
   VkDeviceMemory depthImageMemory;
   VkImageView depthImageView;
 };
-
 
 template<> struct std::hash<AtomicVK::Vertex> {
   size_t operator()(AtomicVK::Vertex const& vertex) const {
