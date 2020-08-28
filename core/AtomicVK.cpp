@@ -7,14 +7,14 @@
  */
 
 char window_title[0x7F];
-unsigned int c_frame, fps, frame_cap=150;
+unsigned int c_frame, fps, frame_cap=65;
 
 void AtomicVK::callback ()
 {
   if (status>=5)
   {
     // Increment FPS counter
-    //if (engine->timer.test(frame_cap, TIMER_FPS+0))
+    if (engine->timer.test(frame_cap, TIMER_FPS+0))
     {
       draw();
       c_frame++;
