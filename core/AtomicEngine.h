@@ -5,27 +5,27 @@
 #ifndef ATOMICENGINE_H
 #define ATOMICENGINE_H
 
-#define STB_IMAGE_IMPLEMENTATION
-
 #include <iostream>
 #include <unistd.h>
+#include <chrono>
 #include <stdio.h>
 #include <cstdlib>
 #include <stdexcept>
 #include <algorithm>
 #include <optional>
 #include <string>
+#include <cstring>
+#include <cstdint>
 #include <vector>
 #include <fstream>
 #include <set>
 #include <array>
+#include <optional>
 #include <sys/time.h>
-#include "../stb_image.h"
 
 #define Min(a,b) a<b?a:b
 #define Max(a,b) a>b?a:b
 
-using namespace std::chrono;
 class AtomicEngine;
 
 #include "AtomicVK.h"

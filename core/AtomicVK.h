@@ -12,21 +12,32 @@
 #include <vulkan/vulkan.h>
 
 /** GLFW - Surface API (Windows, Linux, OSX, WASM) */
-//#define GLFW_INCLUDE_VULKAN
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
 /** GLM - Maths API */
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/gtx/hash.hpp>
+
+#include <unordered_map>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
+
+/** TEMP: .obj loader */
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "../tiny_obj_loader.h"
 
 #include "AtomicEngine.h"
 
-bool a ;
+using namespace std;
 
 class AtomicVK
 {
@@ -55,6 +66,46 @@ class AtomicVK
   }
 
   void callback();
+
+  struct Vertex {
+    glm::vec3 pos;
+    glm::vec3 color;
+    glm::vec2 texCoord;
+
+    static VkVertexInputBindingDescription getBindingDescription() {
+      VkVertexInputBindingDescription bindingDescription{};
+      bindingDescription.binding = 0;
+      bindingDescription.stride = sizeof(Vertex);
+      bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+      return bindingDescription;
+    }
+
+    static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
+      std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+
+      attributeDescriptions[0].binding = 0;
+      attributeDescriptions[0].location = 0;
+      attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+      attributeDescriptions[0].offset = offsetof(Vertex, pos);
+
+      attributeDescriptions[1].binding = 0;
+      attributeDescriptions[1].location = 1;
+      attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+      attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+      attributeDescriptions[2].binding = 0;
+      attributeDescriptions[2].location = 2;
+      attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+      attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
+
+      return attributeDescriptions;
+    }
+
+    bool operator==(const Vertex& other) const {
+      return pos == other.pos && color == other.color && texCoord == other.texCoord;
+    }
+  };
 
  protected:
 
@@ -682,7 +733,8 @@ class AtomicVK
     if (!recreate)
     {
       int texWidth, texHeight, texChannels;
-      stbi_uc* pixels = stbi_load("../trump.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+      //stbi_uc* pixels = stbi_load("../textures/trump.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+      stbi_uc* pixels = stbi_load("../textures/viking_room.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
       VkDeviceSize imageSize = texWidth * texHeight * 4;
 
       if (!pixels) {
@@ -738,6 +790,9 @@ class AtomicVK
         throw std::runtime_error("failed to create texture sampler!");
       }
     }
+
+    // TEMP: Load .obj Model
+    loadModel();
 
     // Init Vertex Buffer
     {
@@ -903,7 +958,8 @@ class AtomicVK
         VkDeviceSize offsets[] = {0};
         vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
 
-        vkCmdBindIndexBuffer(commandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+        //vkCmdBindIndexBuffer(commandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+        vkCmdBindIndexBuffer(commandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
         vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[i], 0, nullptr);
 
@@ -1209,6 +1265,8 @@ class AtomicVK
     glfwTerminate();
   }
 
+  void loadModel();
+
  private:
 
   /**
@@ -1271,57 +1329,25 @@ class AtomicVK
   VkBuffer indexBuffer;
   VkDeviceMemory indexBufferMemory;
 
-  const std::vector<uint16_t> indices = {
-          0, 1, 2, 2, 3, 0,
-          4, 5, 6, 6, 7, 4
-  };
-  struct Vertex
-  {
-    glm::vec3 pos;
-    glm::vec3 color;
-    glm::vec2 texCoord;
+  std::vector<uint32_t> indices;
 
-    static VkVertexInputBindingDescription getBindingDescription() {
-      VkVertexInputBindingDescription bindingDescription{};
-      bindingDescription.binding = 0;
-      bindingDescription.stride = sizeof(Vertex);
-      bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+  //const std::vector<uint16_t> indices = {
+  //        0, 1, 2, 2, 3, 0,
+  //        4, 5, 6, 6, 7, 4
+  //};
 
-      return bindingDescription;
-    }
+  std::vector<Vertex> vertices;
+  //const std::vector<Vertex> vertices = {
+  //  {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+  //  {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+  //  {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+  //  {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
 
-    static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
-      std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
-
-      attributeDescriptions[0].binding = 0;
-      attributeDescriptions[0].location = 0;
-      attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-      attributeDescriptions[0].offset = offsetof(Vertex, pos);
-
-      attributeDescriptions[1].binding = 0;
-      attributeDescriptions[1].location = 1;
-      attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-      attributeDescriptions[1].offset = offsetof(Vertex, color);
-
-      attributeDescriptions[2].binding = 0;
-      attributeDescriptions[2].location = 2;
-      attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-      attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
-
-      return attributeDescriptions;
-    }
-  };
-  const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-    {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-    {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-    {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
-
-    {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-    {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-    {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-    {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
-  };
+  //  {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+  //  {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+  //  {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+  //  {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
+  //};
 
   std::vector<VkBuffer> uniformBuffers;
   std::vector<VkDeviceMemory> uniformBuffersMemory;
@@ -1343,6 +1369,13 @@ class AtomicVK
   VkImage depthImage;
   VkDeviceMemory depthImageMemory;
   VkImageView depthImageView;
+};
+
+
+template<> struct std::hash<AtomicVK::Vertex> {
+  size_t operator()(AtomicVK::Vertex const& vertex) const {
+    return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
+  }
 };
 
 #endif //ATOMICVK_H
