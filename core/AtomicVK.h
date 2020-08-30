@@ -257,7 +257,11 @@ class AtomicVK
         vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, nullptr);
         std::vector<VkExtensionProperties> extensions_available (extension_count);
         vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, extensions_available.data());
-        printf("\nAvailable VK Extensions:\n"); short c=0;
+
+        if (ATOMICENGINE_DEBUG)
+          printf("\nAvailable VK Extensions:\n");
+
+        short c=0;
         for (const auto &e : extensions_available)
           printf("%d   %s\n", ++c, e.extensionName);
         printf("\n");

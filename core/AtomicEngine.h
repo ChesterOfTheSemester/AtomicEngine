@@ -5,6 +5,8 @@
 #ifndef ATOMICENGINE_H
 #define ATOMICENGINE_H
 
+#define ATOMICENGINE_DEBUG 0
+
 #include <iostream>
 #include <unistd.h>
 #include <chrono>
@@ -31,14 +33,15 @@ class AtomicEngine;
 #include "AtomicVK.h"
 
 #define TIMER_FPS   0x00
-#define TIMER_INPUT 0x10
+#define INPUT_KEYS_REPEAT_INTERVAL 16
+#define TIMER_INPUT_KEYS 0x1000 + 1 + 0x200
 
 static struct {
-  int keys[0x15C]        = {0}, // key => action
-      mouse_coords[0x01] = {0}, // X, Y
-      mouse[0x7F]        = {0}, // key => action
-      scroll[0x01]       = {0}; // X, Y
-
+  int    keys[0x15C]        = {0}, // key => action
+         keys_prev[0x15C]   = {0}, // key => action
+         mouse[0xFF]        = {0}; // key => action
+  double mouse_coords[0x01] = {0}, // X, Y
+         scroll[0x01]       = {0}; // X, Y
 } atomicengine_input_map;
 
 class AtomicEngine
@@ -78,13 +81,20 @@ class AtomicEngine
   {
     while (active)
     {
-      // Esc
-      if (atomicengine_input_map.keys[GLFW_KEY_ESCAPE] == GLFW_PRESS)
-        GPU.status = 3;
-
-      // Input handler
+      // Input Handler
+      if (timer.test(120, TIMER_INPUT_KEYS-1))
       {
+        // Test mip
+        if (keyPressed(GLFW_KEY_1))
+        {
+          GPU.test_mip = fmod(GPU.test_mip + 0.05, 0.5);
+          GPU.reload();
+          printf("Mip target %f: !\n", GPU.test_mip);
+        }
 
+        // Esc / Close application
+        if (keyPressed(GLFW_KEY_ESCAPE))
+          GPU.status = 3;
       }
 
       // GPU Cycle / Exit
@@ -105,7 +115,7 @@ class AtomicEngine
 
   struct
   {
-    double stack[0xFFF];
+    double stack[0xFFFFF];
 
     struct timeval tp;
     long unsigned getS () { return getMS() / 1000; }
@@ -128,6 +138,7 @@ class AtomicEngine
   static void input_recorder_mouse_coords(GLFWwindow* window, double x, double y);
   static void input_recorder_mouse(GLFWwindow* window, int button, int action, int mods);
   static void input_recorder_scroll(GLFWwindow* window, double x, double y);
+  bool keyPressed(int key);
 
  protected:
 

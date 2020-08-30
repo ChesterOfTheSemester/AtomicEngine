@@ -59,7 +59,8 @@ VKAPI_ATTR VkBool32 VKAPI_CALL AtomicVK::VkVLCallback(
       messageSeverity != VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
     return VK_TRUE;
 
-  printf("Validation layer: %s\n", pCallbackData->pMessage);
+  if (ATOMICENGINE_DEBUG)
+    printf("Validation layer: %s\n", pCallbackData->pMessage);
 
   return VK_FALSE;
 }
@@ -413,8 +414,9 @@ void AtomicVK::loadModel()
 
 void AtomicEngine::input_recorder_keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+  atomicengine_input_map.keys_prev[key] = atomicengine_input_map.keys[key];
   atomicengine_input_map.keys[key] = action;
-  printf("Key Input Read: %d, %d, %d, %d\n", key, scancode, action, mods);
+  //printf("Key Input Read: %d, %d, %d, %d\n", key, scancode, action, mods);
 }
 
 void AtomicEngine::input_recorder_mouse_coords(GLFWwindow* window, double x, double y)
@@ -427,12 +429,25 @@ void AtomicEngine::input_recorder_mouse_coords(GLFWwindow* window, double x, dou
 void AtomicEngine::input_recorder_mouse(GLFWwindow* window, int button, int action, int mods)
 {
   atomicengine_input_map.mouse[button] = action;
-  //printf("Mouse Input Read: %d, %d\n", button, action);
+  printf("Mouse Input Read: %d, %d\n", button, action);
 }
 
 void AtomicEngine::input_recorder_scroll(GLFWwindow* window, double x, double y)
 {
-  atomicengine_input_map.mouse_coords[0] = x;
-  atomicengine_input_map.mouse_coords[1] = y;
+  atomicengine_input_map.scroll[0] = x;
+  atomicengine_input_map.scroll[1] = y;
   //printf("Scroll Input Read: %f, %f\n", x, y);
+}
+
+bool AtomicEngine::keyPressed(int key)
+{
+  // Repeat
+  if (atomicengine_input_map.keys[key] == GLFW_REPEAT
+      && timer.test(INPUT_KEYS_REPEAT_INTERVAL, TIMER_INPUT_KEYS+key))
+    return 1;
+
+  // Pressed
+  if (atomicengine_input_map.keys_prev[key] == GLFW_PRESS
+      && atomicengine_input_map.keys[key] == GLFW_RELEASE)
+        { atomicengine_input_map.keys_prev[key] = 0; return 1; } else return 0;
 }
