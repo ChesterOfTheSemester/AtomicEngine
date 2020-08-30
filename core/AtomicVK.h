@@ -37,14 +37,15 @@
 
 #include "AtomicEngine.h"
 
-float kaas = 0.0;
-
 class AtomicVK
 {
  public:
+  float test_mip = 0.0;
+
   unsigned status = 0; // { 0:Uninitialized, 1:Idle, 2:Disabled, 3:Disabling, 4:Paused, 5:Active }
 
   AtomicEngine *engine;
+  GLFWwindow *window;
 
   AtomicVK (AtomicEngine *e) : engine(e)
   {
@@ -53,6 +54,11 @@ class AtomicVK
 
     status = 1;
     printf("Initialized GPU (Vulkan)\n");
+  }
+
+  void reload()
+  {
+    initVulkan(1);
   }
 
   void exit()
@@ -802,10 +808,7 @@ class AtomicVK
       samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
       samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
       //samplerInfo.minLod = 0.0f;
-
-      kaas = fmod(kaas + 0.1, 0.5);
-
-      samplerInfo.minLod = static_cast<float>(mipLevels * kaas);
+      samplerInfo.minLod = static_cast<float>(mipLevels * test_mip);
       samplerInfo.maxLod = static_cast<float>(mipLevels);
       samplerInfo.mipLodBias = 0.0f;
 
@@ -1393,8 +1396,7 @@ class AtomicVK
 
   /**
    * VK Data
-   */
-  GLFWwindow *window;                                       uint32_t w_width=800, w_height=600;
+   */                                   uint32_t w_width=800, w_height=600;
   VkInstance instance;                                      const VkAllocationCallbacks *pAllocator;
   const char **glfwExtensions;                              uint32_t glfwExtensionCount=0; std::vector<const char*> extensions;
   bool validation_layers_enabled = true;                    const std::vector<const char*> validation_layers = {"VK_LAYER_KHRONOS_validation"};

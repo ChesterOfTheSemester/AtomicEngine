@@ -30,7 +30,16 @@ class AtomicEngine;
 
 #include "AtomicVK.h"
 
-#define TIMER_FPS 0x00
+#define TIMER_FPS   0x00
+#define TIMER_INPUT 0x10
+
+static struct {
+  int keys[0x15C]        = {0}, // key => action
+      mouse_coords[0x01] = {0}, // X, Y
+      mouse[0x7F]        = {0}, // key => action
+      scroll[0x01]       = {0}; // X, Y
+
+} atomicengine_input_map;
 
 class AtomicEngine
 {
@@ -38,6 +47,8 @@ class AtomicEngine
   AtomicVK GPU;
 
   bool active = false;
+
+  struct atomicengine_input_map *input;
 
   long int engine_started,
            engine_stopped;
@@ -52,6 +63,12 @@ class AtomicEngine
       printf("Initialized Engine\n");
 
       active = true; // Todo Temp: Activate Engine here
+
+      // Init Input Recorders
+      glfwSetKeyCallback(GPU.window, AtomicEngine::input_recorder_keyboard);
+      glfwSetCursorPosCallback(GPU.window, AtomicEngine::input_recorder_mouse_coords);
+      glfwSetMouseButtonCallback(GPU.window, AtomicEngine::input_recorder_mouse);
+      glfwSetScrollCallback(GPU.window, AtomicEngine::input_recorder_scroll);
     }
 
     mainLoop();
@@ -61,6 +78,15 @@ class AtomicEngine
   {
     while (active)
     {
+      // Esc
+      if (atomicengine_input_map.keys[GLFW_KEY_ESCAPE] == GLFW_PRESS)
+        GPU.status = 3;
+
+      // Input handler
+      {
+
+      }
+
       // GPU Cycle / Exit
       if (GPU.status>=5) GPU.callback();
       else if (GPU.status==3) GPU.exit();
@@ -97,6 +123,11 @@ class AtomicEngine
       return rtn;
     }
   } timer;
+
+  static void input_recorder_keyboard(GLFWwindow* window, int key, int scancode, int action, int mods);
+  static void input_recorder_mouse_coords(GLFWwindow* window, double x, double y);
+  static void input_recorder_mouse(GLFWwindow* window, int button, int action, int mods);
+  static void input_recorder_scroll(GLFWwindow* window, double x, double y);
 
  protected:
 

@@ -370,7 +370,7 @@ void AtomicVK::updateUniformBuffer(uint32_t currentImage)
   vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
 }
 
-void AtomicVK::loadModel ()
+void AtomicVK::loadModel()
 {
   tinyobj::attrib_t attrib;
   std::vector<tinyobj::shape_t> shapes;
@@ -409,4 +409,30 @@ void AtomicVK::loadModel ()
       indices.push_back(uniqueVertices[vertex]);
     }
   }
+}
+
+void AtomicEngine::input_recorder_keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+  atomicengine_input_map.keys[key] = action;
+  printf("Key Input Read: %d, %d, %d, %d\n", key, scancode, action, mods);
+}
+
+void AtomicEngine::input_recorder_mouse_coords(GLFWwindow* window, double x, double y)
+{
+  atomicengine_input_map.mouse_coords[0] = x;
+  atomicengine_input_map.mouse_coords[1] = y;
+  //printf("Mouse Coord Read: %f, %f\n", x, y);
+}
+
+void AtomicEngine::input_recorder_mouse(GLFWwindow* window, int button, int action, int mods)
+{
+  atomicengine_input_map.mouse[button] = action;
+  //printf("Mouse Input Read: %d, %d\n", button, action);
+}
+
+void AtomicEngine::input_recorder_scroll(GLFWwindow* window, double x, double y)
+{
+  atomicengine_input_map.mouse_coords[0] = x;
+  atomicengine_input_map.mouse_coords[1] = y;
+  //printf("Scroll Input Read: %f, %f\n", x, y);
 }
