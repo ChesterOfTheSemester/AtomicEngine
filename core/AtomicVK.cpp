@@ -428,8 +428,9 @@ void AtomicEngine::input_recorder_mouse_coords(GLFWwindow* window, double x, dou
 
 void AtomicEngine::input_recorder_mouse(GLFWwindow* window, int button, int action, int mods)
 {
+  atomicengine_input_map.mouse_prev[button] = atomicengine_input_map.mouse[button];
   atomicengine_input_map.mouse[button] = action;
-  printf("Mouse Input Read: %d, %d\n", button, action);
+  //printf("Mouse Input Read: %d, %d\n", button, action);
 }
 
 void AtomicEngine::input_recorder_scroll(GLFWwindow* window, double x, double y)
@@ -450,4 +451,11 @@ bool AtomicEngine::keyPressed(int key)
   if (atomicengine_input_map.keys_prev[key] == GLFW_PRESS
       && atomicengine_input_map.keys[key] == GLFW_RELEASE)
         { atomicengine_input_map.keys_prev[key] = 0; return 1; } else return 0;
+}
+
+bool AtomicEngine::mousePressed(int button)
+{
+  if (atomicengine_input_map.mouse_prev[button] == GLFW_PRESS
+      && atomicengine_input_map.mouse[button] == GLFW_RELEASE)
+        { atomicengine_input_map.mouse_prev[button] = 0; return 1; } else return 0;
 }

@@ -39,7 +39,8 @@ class AtomicEngine;
 static struct {
   int    keys[0x15C]        = {0}, // key => action
          keys_prev[0x15C]   = {0}, // key => action
-         mouse[0xFF]        = {0}; // key => action
+         mouse[0xFF]        = {0}, // key => action
+         mouse_prev[0x15C]  = {0}; // key => action
   double mouse_coords[0x01] = {0}, // X, Y
          scroll[0x01]       = {0}; // X, Y
 } atomicengine_input_map;
@@ -81,7 +82,7 @@ class AtomicEngine
   {
     while (active)
     {
-      // Input Handler
+      // Input Handler Todo: handle down-events
       if (timer.test(120, TIMER_INPUT_KEYS-1))
       {
         // Test mip
@@ -138,7 +139,7 @@ class AtomicEngine
   static void input_recorder_mouse_coords(GLFWwindow* window, double x, double y);
   static void input_recorder_mouse(GLFWwindow* window, int button, int action, int mods);
   static void input_recorder_scroll(GLFWwindow* window, double x, double y);
-  bool keyPressed(int key);
+  bool keyPressed(int key); bool mousePressed(int key);
 
  protected:
 
