@@ -14,3 +14,9 @@ void AtomicGLTF::callback()
 
   else status = 3;
 }
+
+void AtomicGLTF::exit()
+{
+  status = 2;
+  printf("Exiting GLTF\n");
+}

@@ -21,12 +21,7 @@ class AtomicGLTF
   }
 
   void callback();
-
-  void exit()
-  {
-    status = 2;
-    printf("Exiting GLTF\n");
-  }
+  void exit();
 
  protected:
  private:

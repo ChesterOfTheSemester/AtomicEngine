@@ -6,6 +6,8 @@
 
 #IncludeRegexTransform: 
 
+/Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.cpp
+
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.h
 iostream
 -
@@ -45,6 +47,8 @@ AtomicVK.h
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.h
 AtomicGLTF.h
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.h
+AtomicEngine.cpp
+/Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.cpp
 AtomicVK.cpp
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.cpp
 AtomicGLTF.cpp

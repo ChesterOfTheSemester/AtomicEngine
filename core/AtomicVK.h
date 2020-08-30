@@ -187,7 +187,7 @@ class AtomicVK
    **/
   void initVulkan(bool recreate=0)
   {
-    if (!recreate)
+    if (ATOMICENGINE_DEBUG && !recreate)
     {
       printf("\nSPIR-V Compiled Shaders:\n");
       system("glslangValidator -e main -o /Users/chester/Documents/Me/AtomicEngine/shaders/spirv/shader.frag.spv -V /Users/chester/Documents/Me/AtomicEngine/shaders/shader.frag.glsl  &&\n"
@@ -259,12 +259,14 @@ class AtomicVK
         vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, extensions_available.data());
 
         if (ATOMICENGINE_DEBUG)
+        {
           printf("\nAvailable VK Extensions:\n");
 
-        short c=0;
-        for (const auto &e : extensions_available)
-          printf("%d   %s\n", ++c, e.extensionName);
-        printf("\n");
+          short c=0;
+          for (const auto &e : extensions_available)
+            printf("%d   %s\n", ++c, e.extensionName);
+          printf("\n");
+        }
 
         // Load extensions
         uint32_t glfwExtensionCount = 0;

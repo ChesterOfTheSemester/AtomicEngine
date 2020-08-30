@@ -5,8 +5,6 @@
 #ifndef ATOMICENGINE_H
 #define ATOMICENGINE_H
 
-#define ATOMICENGINE_DEBUG 0
-
 #include <iostream>
 #include <unistd.h>
 #include <chrono>
@@ -25,18 +23,20 @@
 #include <optional>
 #include <sys/time.h>
 
-class AtomicEngine;
+#define ATOMICENGINE_DEBUG          0
+
+#define TIMER_FPS                   0x00
+#define INPUT_KEYS_REPEAT_INTERVAL  16
+#define TIMER_INPUT_KEYS            0x1000 + 1 + 0x200
+#define TIMER_GLTF                  0x2000
 
 #define Min(a,b) a<b?a:b
 #define Max(a,b) a>b?a:b
 
+class AtomicEngine;
+
 #include "AtomicVK.h"
 #include "AtomicGLTF.h"
-
-#define TIMER_FPS   0x00
-#define INPUT_KEYS_REPEAT_INTERVAL 16
-#define TIMER_INPUT_KEYS 0x1000 + 1 + 0x200
-#define TIMER_GLTF 0x2000
 
 static struct {
   int    keys[0x15C]        = {0}, // key => action
@@ -52,10 +52,7 @@ class AtomicEngine
  public:
   AtomicVK GPU;
   AtomicGLTF GLTF;
-
   bool active = false;
-
-  struct atomicengine_input_map *input;
 
   long int engine_started,
            engine_stopped;
@@ -81,52 +78,16 @@ class AtomicEngine
         GLTF.status = 5;
       }
 
-      active = true; // Todo Temp: Activate Engine here
+      active = true;
     }
 
     mainLoop();
   }
 
-  void mainLoop()
-  {
-    while (active)
-    {
-      // Input Handler Todo: handle down-events
-      if (timer.test(120, TIMER_INPUT_KEYS-1))
-      {
-        // Test mip
-        if (keyPressed(GLFW_KEY_1))
-        {
-          GPU.test_mip = fmod(GPU.test_mip + 0.05, 0.5);
-          GPU.reload();
-          printf("Mip target %f: !\n", GPU.test_mip);
-        }
+  void mainLoop();
+  void exit();
 
-        // Esc / Close application
-        if (keyPressed(GLFW_KEY_ESCAPE))
-          GPU.status = 3;
-      }
-
-      // GLTF: Cycle / Exit
-      if (GLTF.status>=5) GLTF.callback();
-      else if (GLTF.status==3) GLTF.exit();
-
-      // GPU: Cycle / Exit
-      if (GPU.status>=5) GPU.callback();
-      else if (GPU.status==3) GPU.exit();
-
-      // Exit Engine
-      if (GPU.status==2)
-      {
-        active = false;
-        break;
-      }
-    }
-
-    engine_started = timer.getMS();
-    printf("Exiting Engine\n");
-  }
-
+  // Timer Struct
   struct
   {
     double stack[0xFFFFF];
@@ -148,6 +109,7 @@ class AtomicEngine
     }
   } timer;
 
+  // Input recorders
   static void input_recorder_keyboard(GLFWwindow* window, int key, int scancode, int action, int mods);
   static void input_recorder_mouse_coords(GLFWwindow* window, double x, double y);
   static void input_recorder_mouse(GLFWwindow* window, int button, int action, int mods);
@@ -159,6 +121,7 @@ class AtomicEngine
  private:
 };
 
+#include "AtomicEngine.cpp"
 #include "AtomicVK.cpp"
 #include "AtomicGLTF.cpp"
 
