@@ -25,16 +25,18 @@
 #include <optional>
 #include <sys/time.h>
 
+class AtomicEngine;
+
 #define Min(a,b) a<b?a:b
 #define Max(a,b) a>b?a:b
 
-class AtomicEngine;
-
 #include "AtomicVK.h"
+#include "AtomicGLTF.h"
 
 #define TIMER_FPS   0x00
 #define INPUT_KEYS_REPEAT_INTERVAL 16
 #define TIMER_INPUT_KEYS 0x1000 + 1 + 0x200
+#define TIMER_GLTF 0x2000
 
 static struct {
   int    keys[0x15C]        = {0}, // key => action
@@ -49,6 +51,7 @@ class AtomicEngine
 {
  public:
   AtomicVK GPU;
+  AtomicGLTF GLTF;
 
   bool active = false;
 
@@ -57,7 +60,7 @@ class AtomicEngine
   long int engine_started,
            engine_stopped;
 
-  AtomicEngine() : GPU(this)
+  AtomicEngine() : GPU(this), GLTF(this)
   {
     // Activate Engine
     if (GPU.status==1)
@@ -66,13 +69,19 @@ class AtomicEngine
       engine_started = timer.getMS();
       printf("Initialized Engine\n");
 
-      active = true; // Todo Temp: Activate Engine here
-
       // Init Input Recorders
       glfwSetKeyCallback(GPU.window, AtomicEngine::input_recorder_keyboard);
       glfwSetCursorPosCallback(GPU.window, AtomicEngine::input_recorder_mouse_coords);
       glfwSetMouseButtonCallback(GPU.window, AtomicEngine::input_recorder_mouse);
       glfwSetScrollCallback(GPU.window, AtomicEngine::input_recorder_scroll);
+
+      // Init GLTF
+      if (GLTF.status == 1)
+      {
+        GLTF.status = 5;
+      }
+
+      active = true; // Todo Temp: Activate Engine here
     }
 
     mainLoop();
@@ -98,7 +107,11 @@ class AtomicEngine
           GPU.status = 3;
       }
 
-      // GPU Cycle / Exit
+      // GLTF: Cycle / Exit
+      if (GLTF.status>=5) GLTF.callback();
+      else if (GLTF.status==3) GLTF.exit();
+
+      // GPU: Cycle / Exit
       if (GPU.status>=5) GPU.callback();
       else if (GPU.status==3) GPU.exit();
 
@@ -147,5 +160,6 @@ class AtomicEngine
 };
 
 #include "AtomicVK.cpp"
+#include "AtomicGLTF.cpp"
 
 #endif //ATOMICENGINE_H

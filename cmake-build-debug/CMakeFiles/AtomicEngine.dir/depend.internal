@@ -3,6 +3,8 @@
 
 CMakeFiles/AtomicEngine.dir/main.cpp.o
  /Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.h
+ /Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.cpp
+ /Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.h
  /Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.cpp
  /Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.h
  /Users/chester/Documents/Me/AtomicEngine/main.cpp

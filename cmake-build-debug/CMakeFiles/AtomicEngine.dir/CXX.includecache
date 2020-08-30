@@ -43,8 +43,16 @@ sys/time.h
 -
 AtomicVK.h
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.h
+AtomicGLTF.h
+/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.h
 AtomicVK.cpp
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.cpp
+AtomicGLTF.cpp
+/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.cpp
+
+/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.cpp
+
+/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.h
 
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.cpp
 
