@@ -1107,11 +1107,7 @@ bool AtomicVK::VkDeviceValidate(VkPhysicalDevice device)
 }
 
 // Validation layer callback
-VKAPI_ATTR VkBool32 VKAPI_CALL AtomicVK::VkVLCallback(
-                    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-                    VkDebugUtilsMessageTypeFlagsEXT messageType,
-                    const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-                    void* pUserData)
+VKAPI_ATTR VkBool32 VKAPI_CALL AtomicVK::VkVLCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
 {
   if (messageSeverity != VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT &&
       messageSeverity != VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
