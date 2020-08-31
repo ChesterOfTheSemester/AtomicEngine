@@ -112,12 +112,17 @@ class AtomicVK
   void loadModel();
 
   bool VkVLValidate();
+
   bool VkDeviceValidate(VkPhysicalDevice device);
+
   static VKAPI_ATTR VkBool32 VKAPI_CALL VkVLCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
+
   struct VkQueueFamilyIndices; VkQueueFamilyIndices VkFindQueueFamilies(VkPhysicalDevice device);
+
   bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 
   void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+
   void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
   void updateUniformBuffer(uint32_t currentImage);
@@ -137,8 +142,6 @@ class AtomicVK
   VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
   VkFormat findDepthFormat();
-
-  bool hasStencilComponent(VkFormat format);
 
   void generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t mipLevels);
 
