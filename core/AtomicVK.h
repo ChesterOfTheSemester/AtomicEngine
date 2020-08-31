@@ -26,14 +26,12 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtx/hash.hpp>
 
-#include <unordered_map>
-
 #define STB_IMAGE_IMPLEMENTATION
-#include "../stb_image.h"
+#include "../vendor/stb_image.h"
 
 /** TEMP: .obj loader */
 #define TINYOBJLOADER_IMPLEMENTATION
-#include "../tiny_obj_loader.h"
+#include "../vendor/tiny_obj_loader.h"
 
 #include "AtomicEngine.h"
 

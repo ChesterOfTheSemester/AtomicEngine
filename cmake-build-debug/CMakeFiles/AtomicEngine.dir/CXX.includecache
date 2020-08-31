@@ -41,6 +41,8 @@ array
 -
 optional
 -
+unordered_map
+-
 sys/time.h
 -
 AtomicVK.h
@@ -77,12 +79,10 @@ glm/mat4x4.hpp
 -
 glm/gtx/hash.hpp
 -
-unordered_map
--
-../stb_image.h
-/Users/chester/Documents/Me/AtomicEngine/stb_image.h
-../tiny_obj_loader.h
-/Users/chester/Documents/Me/AtomicEngine/tiny_obj_loader.h
+../vendor/stb_image.h
+/Users/chester/Documents/Me/AtomicEngine/vendor/stb_image.h
+../vendor/tiny_obj_loader.h
+/Users/chester/Documents/Me/AtomicEngine/vendor/tiny_obj_loader.h
 AtomicEngine.h
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.h
 
@@ -116,9 +116,9 @@ emscripten.h
 core/AtomicEngine.h
 /Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.h
 
-/Users/chester/Documents/Me/AtomicEngine/stb_image.h
+/Users/chester/Documents/Me/AtomicEngine/vendor/stb_image.h
 stb_image.h
-/Users/chester/Documents/Me/AtomicEngine/stb_image.h
+/Users/chester/Documents/Me/AtomicEngine/vendor/stb_image.h
 stdio.h
 -
 stdlib.h
@@ -148,7 +148,7 @@ intrin.h
 arm_neon.h
 -
 
-/Users/chester/Documents/Me/AtomicEngine/tiny_obj_loader.h
+/Users/chester/Documents/Me/AtomicEngine/vendor/tiny_obj_loader.h
 map
 -
 string

@@ -21,6 +21,7 @@
 #include <set>
 #include <array>
 #include <optional>
+#include <unordered_map>
 #include <sys/time.h>
 
 #define ATOMICENGINE_DEBUG          0
