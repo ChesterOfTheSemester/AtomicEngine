@@ -83,8 +83,6 @@ glm/gtx/hash.hpp
 /Users/chester/Documents/Me/AtomicEngine/src/vendor/stb_image.h
 ../vendor/tiny_obj_loader.h
 /Users/chester/Documents/Me/AtomicEngine/src/vendor/tiny_obj_loader.h
-AtomicEngine.h
-/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicEngine.h
 
 /Users/chester/Documents/Me/AtomicEngine/src/main.cpp
 iostream
