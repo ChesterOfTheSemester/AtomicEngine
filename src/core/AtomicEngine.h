@@ -24,7 +24,7 @@
 #include <unordered_map>
 #include <sys/time.h>
 
-#define ATOMICENGINE_DEBUG          0
+#define ATOMICENGINE_DEBUG          1
 
 #define TIMER_FPS                   0x00
 #define INPUT_KEYS_REPEAT_INTERVAL  16
