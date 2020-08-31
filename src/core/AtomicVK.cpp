@@ -9,8 +9,8 @@
 char window_title[0x7F];
 unsigned int c_frame, fps, frame_cap=65;
 
-char *load_model = "../textures/viking_room.obj",
-     *load_texture = "../textures/viking_room.png";
+char *load_model = "../textures/alduin.obj",
+     *load_texture = "../textures/alduin.jpg";
 
 // Queue Family Indices
 struct AtomicVK::VkQueueFamilyIndices
@@ -41,7 +41,7 @@ void AtomicVK::callback ()
     // Update Window Title
     if(engine->timer.test(60, TIMER_FPS+2))
     {
-      snprintf(window_title, sizeof(window_title), "FPS: %ld | FPS CAP: %ld | Time MS: %llu", fps, frame_cap, engine->timer.getMS());
+      snprintf(window_title, sizeof(window_title), "FPS: %ld | FPS CAP: %ld | Scale: %.3f | Time MS: %llu", fps, frame_cap, test_scale, engine->timer.getMS());
       glfwSetWindowTitle(window, window_title);
     }
   }
@@ -93,11 +93,13 @@ void AtomicVK::loadModel()
               attrib.vertices[3 * index.vertex_index + 2]
       };
 
-      vertex.texCoord = {
-              //0, 0
-              attrib.texcoords[2 * index.texcoord_index + 0],
-              1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
-      };
+      if ((int) sizeof(attrib.texcoords) <= (int) 2 * index.texcoord_index + 1)
+        vertex.texCoord = {
+                attrib.texcoords[2 * index.texcoord_index + 0],
+                1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+        };
+      else
+        vertex.texCoord = {0, 0};
 
       vertex.color = {1.0f, 0.0f, 0.0f};
 
@@ -183,8 +185,8 @@ void AtomicVK::initVulkan(bool recreate)
   if (ATOMICENGINE_DEBUG && !recreate)
   {
     printf("\nSPIR-V Compiled Shaders:\n");
-    system("glslangValidator -e main -o /Users/chester/Documents/Me/AtomicEngine/shaders/spirv/shader.frag.spv -V /Users/chester/Documents/Me/AtomicEngine/shaders/shader.frag.glsl  &&\n"
-           "glslangValidator -e main -o /Users/chester/Documents/Me/AtomicEngine/shaders/spirv/shader.vert.spv -V /Users/chester/Documents/Me/AtomicEngine/shaders/shader.vert.glsl");
+    system("glslangValidator -e main -o /Users/chester/Documents/Me/AtomicEngine/src/shaders/spirv/shader.frag.spv -V /Users/chester/Documents/Me/AtomicEngine/src/shaders/shader.frag.glsl  &&\n"
+           "glslangValidator -e main -o /Users/chester/Documents/Me/AtomicEngine/src/shaders/spirv/shader.vert.spv -V /Users/chester/Documents/Me/AtomicEngine/src/shaders/shader.vert.glsl");
   }
 
   if (validation_layers_enabled && !VkVLValidate())
@@ -1233,16 +1235,26 @@ void AtomicVK::updateUniformBuffer(uint32_t currentImage)
   float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
   UniformBufferObject ubo{};
-  ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(-10.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-  //ubo.model2 = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+  ubo.model = glm::scale(glm::mat4(test_scale), glm::vec3(test_scale));
+  ubo.model *= glm::rotate(glm::mat4(1.2f), time * glm::radians(-10.0f), glm::vec3(0.5f, 0.5f, 1.0f));
   ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
   ubo.proj = glm::perspective(glm::radians(45.0f), swapchain_extent.width / (float) swapchain_extent.height, 0.1f, 10.0f);
   ubo.proj[1][1] *= -1;
-
   void* data;
   vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
   memcpy(data, &ubo, sizeof(ubo));
   vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
+
+
+  //UniformBufferObject ubo2{};
+  //ubo2.model =
+  //ubo2.model = glm::scale(glm::mat4(0.3f), glm::vec3(0.3f));
+  //ubo2.view =  ubo.view;
+  //ubo2.proj =  ubo.proj;
+  //void* data2;
+  //vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo2), 0, &data2);
+  //memcpy(data, &ubo2, sizeof(ubo2));
+  //vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
 }
 
 void AtomicVK::createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory)

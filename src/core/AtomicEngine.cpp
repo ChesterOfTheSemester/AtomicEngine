@@ -9,12 +9,38 @@ void AtomicEngine::mainLoop()
     // Input Handler Todo: handle down-events
     if (timer.test(120, TIMER_INPUT_KEYS-1))
     {
-      // Test mip
+      // Test Scale IN
+      if (keyPressed(GLFW_KEY_2))
+      {
+        GPU.test_scale = GPU.test_scale * 1.101;
+        if (ATOMICENGINE_DEBUG)
+          printf("Scale target: %.2f\n", GPU.test_scale);
+      }
+
+      // Test Scale OUT
+      if (keyPressed(GLFW_KEY_3))
+      {
+        GPU.test_scale = GPU.test_scale * (1.0 - 0.101);
+        if (ATOMICENGINE_DEBUG)
+          printf("Scale target: %.2f\n", GPU.test_scale);
+      }
+
+      // Reset Scale
+      if (keyPressed(GLFW_KEY_4))
+      {
+        GPU.test_scale = 0.001;
+        if (ATOMICENGINE_DEBUG)
+          printf("Scale target: %.2f\n", GPU.test_scale);
+      }
+
+      // Test Mip
       if (keyPressed(GLFW_KEY_1))
       {
         GPU.test_mip = fmod(GPU.test_mip + 0.10, 0.60);
         GPU.reload();
-        printf("Mip target: %.2f\n", GPU.test_mip);
+
+        if (ATOMICENGINE_DEBUG)
+          printf("Mip target: %.2f\n", GPU.test_mip);
       }
 
       // Esc / Close application

@@ -36,7 +36,8 @@
 class AtomicVK
 {
  public:
-  float test_mip = 0.0;
+  float test_mip = 0.0,
+        test_scale = 0.001;
 
   AtomicEngine *engine;
   GLFWwindow *window;
