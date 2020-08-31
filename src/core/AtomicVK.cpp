@@ -9,6 +9,9 @@
 char window_title[0x7F];
 unsigned int c_frame, fps, frame_cap=65;
 
+char *load_model = "../textures/viking_room.obj",
+     *load_texture = "../textures/viking_room.png";
+
 // Queue Family Indices
 struct AtomicVK::VkQueueFamilyIndices
 {
@@ -74,7 +77,7 @@ void AtomicVK::loadModel()
   std::vector<tinyobj::material_t> materials;
   std::string warn, err;
 
-  if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, "../textures/viking_room.obj")) {
+  if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, load_model)) {
     throw std::runtime_error(warn + err);
   }
 
@@ -750,7 +753,7 @@ void AtomicVK::initVulkan(bool recreate)
   {
     int texWidth, texHeight, texChannels;
     //stbi_uc* pixels = stbi_load("../textures/trump.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-    stbi_uc* pixels = stbi_load("../textures/viking_room.png", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    stbi_uc* pixels = stbi_load(load_texture, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize imageSize = texWidth * texHeight * 4;
     mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
 
