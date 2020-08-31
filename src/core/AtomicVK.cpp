@@ -1638,6 +1638,10 @@ void AtomicVK::cleanSwapChain()
   vkDestroyImage(device, depthImage, nullptr);
   vkFreeMemory(device, depthImageMemory, nullptr);
 
+  vkDestroyImageView(device, colorImageView, nullptr);
+  vkDestroyImage(device, colorImage, nullptr);
+  vkFreeMemory(device, colorImageMemory, nullptr);
+
   for (auto framebuffer : swapChainFramebuffers) {
     vkDestroyFramebuffer(device, framebuffer, nullptr);
   }
