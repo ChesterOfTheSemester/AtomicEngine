@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "AtomicEngine"
   "AtomicEngine.pdb"
-  "CMakeFiles/AtomicEngine.dir/main.cpp.o"
+  "CMakeFiles/AtomicEngine.dir/src/main.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

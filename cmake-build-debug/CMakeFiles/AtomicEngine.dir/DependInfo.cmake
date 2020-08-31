@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/chester/Documents/Me/AtomicEngine/main.cpp" "/Users/chester/Documents/Me/AtomicEngine/cmake-build-debug/CMakeFiles/AtomicEngine.dir/main.cpp.o"
+  "/Users/chester/Documents/Me/AtomicEngine/src/main.cpp" "/Users/chester/Documents/Me/AtomicEngine/cmake-build-debug/CMakeFiles/AtomicEngine.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

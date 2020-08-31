@@ -84,7 +84,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/chester/Documents/Me/AtomicEngine/main.cpp">
+		<Unit filename="/Users/chester/Documents/Me/AtomicEngine/src/main.cpp">
 			<Option target="AtomicEngine"/>
 		</Unit>
 		<Unit filename="/Users/chester/Documents/Me/AtomicEngine/CMakeLists.txt">

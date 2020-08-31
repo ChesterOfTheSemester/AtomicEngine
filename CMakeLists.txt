@@ -4,7 +4,7 @@ project(AtomicEngine)
 set(CMAKE_CXX_FLAGS "-pipe -lm -std=c++2a")
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(AtomicEngine main.cpp)
+add_executable(AtomicEngine src/main.cpp)
 
 #Vulkan
 find_package(Vulkan REQUIRED)

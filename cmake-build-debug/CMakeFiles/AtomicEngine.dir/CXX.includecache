@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.cpp
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicEngine.cpp
 
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.h
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicEngine.h
 iostream
 -
 unistd.h
@@ -46,23 +46,23 @@ unordered_map
 sys/time.h
 -
 AtomicVK.h
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.h
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicVK.h
 AtomicGLTF.h
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.h
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicGLTF.h
 AtomicEngine.cpp
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.cpp
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicEngine.cpp
 AtomicVK.cpp
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.cpp
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicVK.cpp
 AtomicGLTF.cpp
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.cpp
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicGLTF.cpp
 
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.cpp
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicGLTF.cpp
 
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicGLTF.h
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicGLTF.h
 
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.cpp
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicVK.cpp
 
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicVK.h
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicVK.h
 vulkan/vulkan.h
 -
 GLFW/glfw3.h
@@ -80,13 +80,13 @@ glm/mat4x4.hpp
 glm/gtx/hash.hpp
 -
 ../vendor/stb_image.h
-/Users/chester/Documents/Me/AtomicEngine/vendor/stb_image.h
+/Users/chester/Documents/Me/AtomicEngine/src/vendor/stb_image.h
 ../vendor/tiny_obj_loader.h
-/Users/chester/Documents/Me/AtomicEngine/vendor/tiny_obj_loader.h
+/Users/chester/Documents/Me/AtomicEngine/src/vendor/tiny_obj_loader.h
 AtomicEngine.h
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.h
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicEngine.h
 
-/Users/chester/Documents/Me/AtomicEngine/main.cpp
+/Users/chester/Documents/Me/AtomicEngine/src/main.cpp
 iostream
 -
 unistd.h
@@ -114,11 +114,11 @@ unordered_map
 emscripten.h
 -
 core/AtomicEngine.h
-/Users/chester/Documents/Me/AtomicEngine/core/AtomicEngine.h
+/Users/chester/Documents/Me/AtomicEngine/src/core/AtomicEngine.h
 
-/Users/chester/Documents/Me/AtomicEngine/vendor/stb_image.h
+/Users/chester/Documents/Me/AtomicEngine/src/vendor/stb_image.h
 stb_image.h
-/Users/chester/Documents/Me/AtomicEngine/vendor/stb_image.h
+/Users/chester/Documents/Me/AtomicEngine/src/vendor/stb_image.h
 stdio.h
 -
 stdlib.h
@@ -148,7 +148,7 @@ intrin.h
 arm_neon.h
 -
 
-/Users/chester/Documents/Me/AtomicEngine/vendor/tiny_obj_loader.h
+/Users/chester/Documents/Me/AtomicEngine/src/vendor/tiny_obj_loader.h
 map
 -
 string

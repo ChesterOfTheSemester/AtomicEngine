@@ -77,27 +77,27 @@ include CMakeFiles/AtomicEngine.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/AtomicEngine.dir/flags.make
 
-CMakeFiles/AtomicEngine.dir/main.cpp.o: CMakeFiles/AtomicEngine.dir/flags.make
-CMakeFiles/AtomicEngine.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chester/Documents/Me/AtomicEngine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AtomicEngine.dir/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AtomicEngine.dir/main.cpp.o -c /Users/chester/Documents/Me/AtomicEngine/main.cpp
+CMakeFiles/AtomicEngine.dir/src/main.cpp.o: CMakeFiles/AtomicEngine.dir/flags.make
+CMakeFiles/AtomicEngine.dir/src/main.cpp.o: ../src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chester/Documents/Me/AtomicEngine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AtomicEngine.dir/src/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AtomicEngine.dir/src/main.cpp.o -c /Users/chester/Documents/Me/AtomicEngine/src/main.cpp
 
-CMakeFiles/AtomicEngine.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AtomicEngine.dir/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chester/Documents/Me/AtomicEngine/main.cpp > CMakeFiles/AtomicEngine.dir/main.cpp.i
+CMakeFiles/AtomicEngine.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AtomicEngine.dir/src/main.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chester/Documents/Me/AtomicEngine/src/main.cpp > CMakeFiles/AtomicEngine.dir/src/main.cpp.i
 
-CMakeFiles/AtomicEngine.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AtomicEngine.dir/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chester/Documents/Me/AtomicEngine/main.cpp -o CMakeFiles/AtomicEngine.dir/main.cpp.s
+CMakeFiles/AtomicEngine.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AtomicEngine.dir/src/main.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chester/Documents/Me/AtomicEngine/src/main.cpp -o CMakeFiles/AtomicEngine.dir/src/main.cpp.s
 
 # Object files for target AtomicEngine
 AtomicEngine_OBJECTS = \
-"CMakeFiles/AtomicEngine.dir/main.cpp.o"
+"CMakeFiles/AtomicEngine.dir/src/main.cpp.o"
 
 # External object files for target AtomicEngine
 AtomicEngine_EXTERNAL_OBJECTS =
 
-AtomicEngine: CMakeFiles/AtomicEngine.dir/main.cpp.o
+AtomicEngine: CMakeFiles/AtomicEngine.dir/src/main.cpp.o
 AtomicEngine: CMakeFiles/AtomicEngine.dir/build.make
 AtomicEngine: /usr/local/lib/libvulkan.dylib
 AtomicEngine: /usr/local/lib/libglfw.3.4.dylib

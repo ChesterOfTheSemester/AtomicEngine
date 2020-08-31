@@ -532,8 +532,8 @@ class AtomicVK
 
       // Shader Modules
       {
-        vertShaderCode = readFile("/Users/chester/Documents/Me/AtomicEngine/shaders/spirv/shader.vert.spv");
-        fragShaderCode = readFile("/Users/chester/Documents/Me/AtomicEngine/shaders/spirv/shader.frag.spv");
+        vertShaderCode = readFile("/Users/chester/Documents/Me/AtomicEngine/src/shaders/spirv/shader.vert.spv");
+        fragShaderCode = readFile("/Users/chester/Documents/Me/AtomicEngine/src/shaders/spirv/shader.frag.spv");
 
         vertShaderModule = createShaderModule(vertShaderCode);
         fragShaderModule = createShaderModule(fragShaderCode);
