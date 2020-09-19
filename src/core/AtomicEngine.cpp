@@ -10,6 +10,13 @@ void AtomicEngine::mainLoop()
     if (timer.test(120, TIMER_INPUT_KEYS-1))
     {
       // Test Scale IN
+      if (keyPressed(GLFW_KEY_5))
+      {
+        _load_model = true;
+        GPU.reload();
+      }
+
+      // Test Scale IN
       if (keyPressed(GLFW_KEY_2))
       {
         GPU.test_scale = GPU.test_scale * 1.101;

@@ -87,13 +87,16 @@ void AtomicVK::loadModel()
     for (const auto& index : shape.mesh.indices) {
       Vertex vertex{};
 
-      vertex.pos = {
-              attrib.vertices[3 * index.vertex_index + 0],
-              attrib.vertices[3 * index.vertex_index + 1],
-              attrib.vertices[3 * index.vertex_index + 2]
-      };
+      if (_load_model)
+        vertex.pos = {
+                attrib.vertices[3 * index.vertex_index + 0],
+                attrib.vertices[3 * index.vertex_index + 1],
+                attrib.vertices[3 * index.vertex_index + 2]
+        };
+      else
+        vertex.pos = {0, 0, 0};
 
-      if ((int) sizeof(attrib.texcoords) <= (int) 2 * index.texcoord_index + 1)
+      if (_load_model && (int) sizeof(attrib.texcoords) <= (int) 2 * index.texcoord_index + 1)
         vertex.texCoord = {
                 attrib.texcoords[2 * index.texcoord_index + 0],
                 1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
@@ -192,6 +195,7 @@ void AtomicVK::initVulkan(bool recreate)
   if (validation_layers_enabled && !VkVLValidate())
     throw std::runtime_error("Requested validation layers are unavailable");
 
+  // Recreate Window & Swap Chain
   if (recreate)
   {
     int width = 0, height = 0;
@@ -789,7 +793,6 @@ void AtomicVK::initVulkan(bool recreate)
 
     transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, mipLevels);
     copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
-    //transitioned to VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL while generating mipmaps
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);
@@ -829,11 +832,54 @@ void AtomicVK::initVulkan(bool recreate)
   }
 
   // TEMP: Load .obj Model
-  if (!recreate)
-  loadModel();
+  if (!recreate || _load_model)
+  {
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn, err;
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, load_model)) {
+      throw std::runtime_error(warn + err);
+    }
+
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+
+    for (const auto& shape : shapes) {
+      for (const auto& index : shape.mesh.indices) {
+        Vertex vertex{};
+
+        if (_load_model)
+          vertex.pos = {
+            attrib.vertices[3 * index.vertex_index + 0],
+            attrib.vertices[3 * index.vertex_index + 1],
+            attrib.vertices[3 * index.vertex_index + 2]
+          };
+        else
+          vertex.pos = {0, 0, 0};
+
+        if (_load_model && (int) sizeof(attrib.texcoords) <= (int) 2 * index.texcoord_index + 1)
+          vertex.texCoord = {
+                  attrib.texcoords[2 * index.texcoord_index + 0],
+                  1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+          };
+        else
+          vertex.texCoord = {0, 0};
+
+        vertex.color = {1.0f, 0.0f, 0.0f};
+
+        if (uniqueVertices.count(vertex) == 0) {
+          uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+          vertices.push_back(vertex);
+        }
+
+        indices.push_back(uniqueVertices[vertex]);
+      }
+    }
+  }
 
   // Init Vertex Buffer
-  if (!recreate)
+  if (!recreate || _load_model)
   {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
@@ -855,7 +901,7 @@ void AtomicVK::initVulkan(bool recreate)
   }
 
   // Init Index Buffer
-  if (!recreate)
+  if (!recreate || _load_model)
   {
     VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
@@ -878,14 +924,17 @@ void AtomicVK::initVulkan(bool recreate)
 
   // Init Uniform Buffers {{{RECREATE}}}
   {
-    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+    VkDeviceSize bufferSize = sizeof(UniformBufferObject) + sizeof(UniformBufferCamera);
 
     uniformBuffers.resize(swapchain_images.size());
     uniformBuffersMemory.resize(swapchain_images.size());
 
-    for (size_t i = 0; i < swapchain_images.size(); i++) {
-      createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
-    }
+    for (size_t i=0; i<swapchain_images.size(); i++)
+      createBuffer(bufferSize,
+                   VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                   uniformBuffers[i],
+                   uniformBuffersMemory[i]);
   }
 
   // Init Descriptor Pool {{{RECREATE}}}
@@ -925,7 +974,7 @@ void AtomicVK::initVulkan(bool recreate)
       VkDescriptorBufferInfo bufferInfo{};
       bufferInfo.buffer = uniformBuffers[i];
       bufferInfo.offset = 0;
-      bufferInfo.range = sizeof(UniformBufferObject);
+      bufferInfo.range = sizeof(UniformBufferObject) + sizeof(UniformBufferCamera);
 
       VkDescriptorImageInfo imageInfo{};
       imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -1247,27 +1296,27 @@ void AtomicVK::updateUniformBuffer(uint32_t currentImage)
   auto currentTime = std::chrono::high_resolution_clock::now();
   float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
+  // UBO
   UniformBufferObject ubo{};
   ubo.model = glm::scale(glm::mat4(test_scale), glm::vec3(test_scale));
   ubo.model *= glm::rotate(glm::mat4(1.2f), time * glm::radians(-10.0f), glm::vec3(0.5f, 0.5f, 1.0f));
   ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
   ubo.proj = glm::perspective(glm::radians(45.0f), swapchain_extent.width / (float) swapchain_extent.height, 0.1f, 10.0f);
   ubo.proj[1][1] *= -1;
-  void* data;
+
+  void *data;
   vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
   memcpy(data, &ubo, sizeof(ubo));
   vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
 
+  // Camera
+  UniformBufferCamera camera{};
+  camera.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-  //UniformBufferObject ubo2{};
-  //ubo2.model =
-  //ubo2.model = glm::scale(glm::mat4(0.3f), glm::vec3(0.3f));
-  //ubo2.view =  ubo.view;
-  //ubo2.proj =  ubo.proj;
-  //void* data2;
-  //vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo2), 0, &data2);
-  //memcpy(data, &ubo2, sizeof(ubo2));
-  //vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
+  void *data2;
+  vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(camera), 0, &data2);
+  memcpy(data2, &camera, sizeof(camera));
+  vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
 }
 
 void AtomicVK::createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory)

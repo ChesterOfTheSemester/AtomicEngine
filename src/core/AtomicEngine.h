@@ -1,3 +1,5 @@
+// Todo: LEARN: https://vulkan.lunarg.com/doc/sdk/1.2.148.1/mac/tutorial/html/07-init_uniform_buffer.html
+
 /**
  * AtomicEngine 0.1
  */
@@ -48,6 +50,8 @@ static struct {
          scroll[0x01]       = {0}; // X, Y
 } atomicengine_input_map;
 
+bool _load_model = false;
+
 class AtomicEngine
 {
  public:
@@ -80,6 +84,12 @@ class AtomicEngine
       }
 
       active = true;
+
+      // Todo: Application sample
+      {
+        _load_model = true;
+        GPU.reload();
+      }
     }
 
     mainLoop();
