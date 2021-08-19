@@ -1,3 +1,0 @@
-/Users/chester/Documents/Me/AtomicEngine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/chester/Documents/Me/AtomicEngine/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/chester/Documents/Me/AtomicEngine/cmake-build-debug/CMakeFiles/AtomicEngine.dir
